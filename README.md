@@ -4,284 +4,390 @@
 **Study Region:** Southeastern Türkiye
 **Study Period:** 1990–2025
 **Programming Environment:** R
-**Primary Framework:** Markov-Switching Models and Hidden Markov Models
+**Primary Methods:** Hidden Markov Models, Markov-Switching Models, AIC/BIC Model Selection, Transition Probability Analysis, Regime Persistence, Duration Analysis, Multivariate Regime Analysis, Compound Hot-Dry Analysis
 
 ---
 
 ## Abstract
 
-Climate variability is commonly examined through linear trends, anomalies, correlations, and conventional extreme-event indicators. Although these approaches are valuable, they generally assume that the underlying statistical behavior of a climate variable can be represented by a single continuous process. Such an assumption may be inadequate when the climate system alternates between distinct states characterized by different means, variances, persistence levels, and transition dynamics.
+Climate variability is frequently investigated using linear trends, anomalies, correlation analysis, and conventional climate indices. Although these approaches provide important information about the direction and magnitude of climatic change, they generally treat the observed climate series as a single statistical process. Such an assumption may be insufficient when climatic conditions alternate between distinct states with different means, variability, persistence, and transition characteristics.
 
-This study investigates the existence and temporal behavior of **hidden climate regimes in Southeastern Türkiye** using a Markov-switching framework. The analysis covers the 1990–2025 period and combines exploratory climate diagnostics, standardized anomalies, autocorrelation analysis, partial autocorrelation analysis, Hidden Markov Models (HMM), alternative Markov-switching specifications, information-criterion-based model selection, regime probabilities, transition matrices, persistence measures, empirical and expected regime durations, frequency analysis, inter-provincial comparisons, minimum-temperature regimes, humidity regimes, and multivariate/compound climate-state analysis.
+This study investigates the existence and temporal behaviour of **hidden climate regimes in Southeastern Türkiye during 1990–2025** using a Markov-switching framework supported by Hidden Markov Models (HMM). The analysis combines descriptive climate statistics, long-term behaviour metrics, seasonality analysis, standardized anomalies, autocorrelation and partial autocorrelation diagnostics, alternative two-, three-, and four-regime specifications, information-criterion-based model selection, regime probabilities, most-likely regime classification, transition probability matrices, expected and empirical regime durations, regime frequencies, inter-provincial comparisons, minimum-temperature regimes, humidity regimes, multivariate climate-state analysis, and compound hot-dry conditions.
 
-The central objective is not simply to determine whether climate variables have increased or decreased. Instead, the study asks whether the regional climate system exhibits **statistically distinguishable states**, how frequently the system moves between these states, how persistent individual regimes are, and whether warm, dry, humid, or compound anomalous conditions occupy an increasingly important position within the regional climate variability structure.
+The results demonstrate that the temporal structure of climate variability in Southeastern Türkiye can be interpreted through **multiple statistically distinguishable states rather than a single homogeneous process**. The identified regimes differ not only in their central tendency but also in their persistence, duration, frequency, and probability of transition toward alternative states.
 
-The results indicate that climate variability in Southeastern Türkiye can be meaningfully investigated as a **regime-switching stochastic process rather than as a homogeneous time series**. The resulting framework provides information on regime persistence, transition dynamics, and state-specific behavior that cannot be obtained directly from conventional trend analysis alone.
+A particularly important finding is that climate-state persistence provides information that cannot be obtained from a conventional linear trend alone. A warm or anomalous regime may become important not simply because its mean value is higher, but because it can persist for consecutive observations and exhibit a high probability of remaining within the same state.
+
+The analysis further demonstrates that climate-regime behaviour varies among provinces and that maximum temperature, minimum temperature, humidity, and compound hot-dry conditions provide complementary information about the structure of regional climate variability.
+
+The study therefore proposes a regime-oriented framework for understanding climate variability in Southeastern Türkiye, emphasizing **state identification, persistence, transition dynamics, temporal evolution, and compound climate behaviour**.
 
 ---
 
 # 1. Research Motivation
 
-Southeastern Türkiye represents a particularly sensitive climatic environment because of its strong seasonal cycle, high summer temperatures, relatively dry atmospheric conditions, and substantial temporal variability in temperature and precipitation.
+Southeastern Türkiye is characterized by strong seasonal contrasts, high summer temperatures, relatively dry atmospheric conditions, and considerable interannual climate variability.
 
-Conventional climate analysis generally focuses on questions such as:
+Conventional climate studies generally ask:
 
-> Is temperature increasing?
+* Is temperature increasing?
+* Is precipitation decreasing?
+* Are extreme conditions becoming more frequent?
+* Are climatic anomalies becoming stronger?
 
-> Is precipitation decreasing?
+These questions remain important. However, a climate system can exhibit substantial structural variability even when its overall linear trend does not fully capture the underlying dynamics.
 
-> Are climate extremes becoming more frequent?
+This study therefore introduces a complementary question:
 
-This project introduces a complementary question:
+> **Does the regional climate system alternate between distinct statistical regimes, and how persistent and transitional are these regimes?**
 
-> **Does the statistical behavior of the climate system change between distinct and persistent regimes, and how does the system transition between these regimes?**
+A Markov-switching framework is particularly appropriate because the statistical properties of the observed climate series are allowed to depend on an unobserved state variable.
 
-A Markov-switching framework is particularly appropriate for this purpose because the statistical properties of the observed climate variable are allowed to vary according to an unobserved state variable.
+The climate system is therefore conceptualized as:
 
-Consequently, the analysis moves from a purely trend-oriented perspective toward a **state-dependent interpretation of climate variability**.
+```text
+Climate observations
+        ↓
+Latent statistical state
+        ↓
+Regime persistence
+        ↓
+Transition to another regime
+        ↓
+New climate state
+```
+
+This approach allows climate variability to be interpreted as a **dynamic state-switching process** rather than solely as a monotonic trend.
 
 ---
 
 # 2. Research Objectives
 
-The study has six principal objectives:
+The study was designed to address the following objectives:
 
-1. To identify statistically distinguishable climate regimes in Southeastern Türkiye.
-2. To characterize the statistical properties of each detected regime.
-3. To estimate transition probabilities between climate states.
-4. To quantify regime persistence and expected duration.
-5. To compare alternative two-, three-, and four-regime specifications.
-6. To investigate whether temperature, precipitation, humidity, and compound hot-dry conditions exhibit coherent regime structures.
-
-Additional objectives include:
-
-* evaluating temporal autocorrelation and memory;
-* identifying the most probable regime at each observation;
-* comparing empirical and model-based regime durations;
-* evaluating differences among provinces;
-* examining minimum-temperature behavior separately from maximum temperature;
-* investigating humidity-related regimes;
-* integrating multiple climate variables into a multivariate regime framework.
+1. Identify hidden climate regimes in Southeastern Türkiye.
+2. Determine whether two-, three-, or four-regime specifications provide the most appropriate representation of the climate system.
+3. Characterize the statistical properties of each regime.
+4. Estimate transition probabilities between regimes.
+5. Quantify the persistence of individual climate states.
+6. Estimate expected and empirical regime durations.
+7. Determine the temporal probability of each regime.
+8. Identify the most likely regime for each observation.
+9. Compare regime characteristics among provinces.
+10. Examine minimum-temperature regime behaviour.
+11. Investigate humidity-related climate states.
+12. Evaluate multivariate climate-regime behaviour.
+13. Investigate compound hot-dry conditions.
+14. Develop a reproducible R-based framework for regime-oriented climate analysis.
 
 ---
 
-# 3. Study Region and Data
+# 3. Data and Study Period
 
-The analysis focuses on **Southeastern Türkiye** and covers the period **1990–2025**.
+The analysis covers the **1990–2025 period** and focuses on climate variability in Southeastern Türkiye.
 
-The repository contains processed climate datasets and analytical outputs for temperature and other climate variables. The principal variables represented in the analytical workflow include:
+The analytical workflow incorporates multiple climate variables and derived statistical representations, including:
 
-* Maximum air temperature (Tmax)
-* Minimum air temperature (Tmin)
-* Precipitation
-* Relative humidity
-* Standardized climate anomalies
-* Multivariate climate indicators
+* maximum temperature;
+* minimum temperature;
+* precipitation;
+* humidity;
+* standardized anomalies;
+* multivariate climate indicators;
+* compound hot-dry conditions.
 
-The repository contains dedicated Excel outputs for descriptive statistics, standardized climate panels, autocorrelation/partial autocorrelation diagnostics, Markov-switching models, HMM regimes, regime probabilities, transition matrices, regime durations, regime frequencies, humidity regimes, multivariate comparisons, and compound hot-dry conditions.
+The repository contains processed Excel outputs corresponding to each major analytical stage.
+
+These include:
+
+* descriptive statistics;
+* long-term climate metrics;
+* standardized climate panels;
+* ACF/PACF diagnostics;
+* HMM classifications;
+* Markov-switching models;
+* model-selection statistics;
+* regime statistics;
+* regime probabilities;
+* transition matrices;
+* duration statistics;
+* regime frequencies;
+* inter-provincial comparisons;
+* humidity regimes;
+* multivariate comparisons;
+* compound hot-dry analysis.
 
 ---
 
-# 4. Analytical Framework
+# 4. Methodological Framework
 
-The complete analytical workflow follows the structure:
+The complete workflow can be summarized as:
 
 ```text
 Climate Data
       ↓
-Data Preparation and Quality Control
+Data Preparation
       ↓
 Descriptive Statistics
       ↓
-Long-Term Climate Behaviour
+Long-Term Behaviour
       ↓
-Seasonality Analysis
+Seasonality
       ↓
 Standardization
       ↓
-ACF / PACF Diagnostics
+ACF / PACF
       ↓
 Hidden Markov Model
       ↓
-Markov-Switching Estimation
+Markov-Switching Models
       ↓
-2-, 3-, and 4-Regime Models
+2-, 3-, 4-Regime Comparison
       ↓
-AIC / BIC / Log-Likelihood Comparison
+AIC / BIC / Log-Likelihood
       ↓
 Regime Identification
       ↓
 Regime Probabilities
       ↓
-Transition Probability Matrix
+Most-Likely Regime
       ↓
-Regime Persistence
+Transition Matrix
       ↓
-Expected and Empirical Durations
+Persistence
       ↓
-Regime Frequencies
+Expected Duration
       ↓
-Inter-Provincial Comparison
+Empirical Duration
       ↓
-Tmin and Humidity Regimes
+Regime Frequency
       ↓
-Multivariate and Compound Hot-Dry Analysis
+Inter-Provincial Analysis
+      ↓
+Tmin / Humidity Analysis
+      ↓
+Multivariate Analysis
+      ↓
+Compound Hot-Dry Analysis
 ```
 
 ---
 
-# 5. Statistical Methodology
+# 5. Exploratory Climate Results
 
-## 5.1 Descriptive Statistics
+## 5.1 Maximum Temperature Distribution
 
-Initial statistical characterization was conducted using:
+### Figure 1 — Tmax Distribution
 
-* mean;
-* median;
-* standard deviation;
-* minimum;
-* maximum;
-* variability measures;
-* long-term behavior metrics.
+![Figure 1](Figure_1_T2M_MAX_Boxplot.png)
 
-These statistics provide the baseline against which regime-specific characteristics can subsequently be interpreted.
+The initial distributional analysis establishes the thermal background of the study region.
 
-The corresponding output is stored in:
+The boxplot demonstrates that maximum-temperature behaviour is not identical across the analyzed locations. Differences in central tendency, dispersion, and the distribution of extreme observations indicate that the regional climate system contains meaningful spatial heterogeneity.
+
+This initial result is important for the subsequent Markov analysis because a single regional distribution could obscure location-specific climate-state behaviour.
+
+The corresponding descriptive statistics are provided in:
 
 `Southeastern_Anatolia_Descriptive_Statistics_1990_2025.xlsx`
 
-and
+---
 
-`Southeastern_Anatolia_LongTerm_Behavior_Metrics.xlsx`
+# 6. Precipitation Behaviour
+
+## 6.1 Long-Term Precipitation Variability
+
+### Figure 2 — Precipitation Trends
+
+![Figure 2](Figure_2_Precipitation_Trends.png)
+
+The precipitation analysis reveals substantial temporal variability in rainfall behaviour.
+
+Unlike temperature, precipitation typically exhibits greater intermittency and short-term variability. Consequently, the precipitation series provides an important complementary dimension for understanding whether climate regimes are characterized only by thermal conditions or also by moisture-related variability.
 
 ---
 
-## 5.2 Standardized Climate Anomalies
+## 6.2 Precipitation Fluctuations
 
-Because the climate variables have different physical units and statistical scales, standardized anomalies were incorporated into the analytical workflow.
+### Figure 5 — Precipitation Fluctuations
 
-Standardization allows temporal deviations to be compared across provinces and variables without allowing the original measurement scale to dominate the multivariate analysis.
+![Figure 5](Figure_5_Precipitation_Fluctuations.png)
 
-The processed standardized panel is provided in:
+The fluctuation analysis highlights the episodic nature of precipitation.
+
+This variability is particularly relevant to the later compound hot-dry analysis because dry conditions are not simply represented by the long-term precipitation mean. Instead, the temporal organization of low-precipitation conditions becomes important.
+
+---
+
+# 7. Long-Term Temperature Behaviour
+
+### Figure 3 — Long-Term T2M Behaviour
+
+![Figure 3](Figure_3_LongTerm_Behavior_T2M.png)
+
+The long-term temperature series provides the baseline against which regime transitions are interpreted.
+
+The temporal evolution of the series demonstrates that the regional temperature record contains substantial variability superimposed on the long-term climate signal.
+
+This is important because the Markov-switching approach does not attempt to replace long-term climate analysis. Instead, it decomposes the temporal behaviour into statistically distinguishable states.
+
+---
+
+# 8. Seasonality
+
+### Figure 4 — Seasonal Cycle
+
+![Figure 4](Figure_4_Seasonality_Cycle.png)
+
+The seasonal cycle represents one of the strongest deterministic components of the regional climate system.
+
+The presence of pronounced seasonality demonstrates why climate-state interpretation must be undertaken carefully. A statistical regime should not simply represent the normal difference between winter and summer.
+
+Consequently, the subsequent regime analysis focuses on the statistical structure of the time series rather than merely reproducing the known annual temperature cycle.
+
+---
+
+# 9. Temporal Dependence
+
+## 9.1 Autocorrelation
+
+### Figure 6 — ACF
+
+![Figure 6](Figure_6_ACF_All_Provinces.png)
+
+The autocorrelation analysis indicates temporal dependence in the climate observations.
+
+This is important because climate observations occurring close together in time are not necessarily statistically independent.
+
+Persistent autocorrelation provides a statistical basis for examining whether periods of similar climate conditions form coherent episodes rather than appearing randomly.
+
+---
+
+## 9.2 Partial Autocorrelation
+
+### Figure 7 — PACF
+
+![Figure 7](Figure_7_PACF_All_Provinces.png)
+
+The PACF analysis complements the ACF by identifying the contribution of individual lags after accounting for shorter-term dependencies.
+
+Together, Figures 6 and 7 establish the temporal-memory structure of the series and provide an important diagnostic foundation for the subsequent state-dependent modelling.
+
+---
+
+# 10. Standardized Climate Anomalies
+
+### Figure 9 — Standardized Anomalies
+
+![Figure 9](Figure_9_Standardized_Anomalies_All_Provinces.png)
+
+Standardization places climate observations on a common statistical scale.
+
+This is particularly important for comparing:
+
+* different provinces;
+* different climate variables;
+* thermal and moisture-related conditions.
+
+The standardized climate panel is stored in:
 
 `Standardized_Climate_Panel_1990_2025.xlsx`
 
----
-
-## 5.3 Seasonality
-
-Climate time series in Southeastern Türkiye exhibit a pronounced seasonal cycle.
-
-Therefore, the seasonal structure was examined before interpreting regime behavior.
-
-This step is particularly important because an apparent regime pattern may otherwise reflect deterministic seasonal variability rather than a genuine change in the underlying statistical state.
+The anomaly representation makes it easier to identify periods in which observations deviate substantially from their typical local conditions.
 
 ---
 
-## 5.4 Autocorrelation and Partial Autocorrelation
+# 11. Hidden Markov Model Results
 
-The temporal dependence structure was evaluated using:
+### Figure 8 — HMM Academic Regimes
 
-* Autocorrelation Function (ACF)
-* Partial Autocorrelation Function (PACF)
+![Figure 8](Figure_8_HMM_Academic_Regimes_All_Provinces.png)
 
-The results are provided in:
+The Hidden Markov Model provides the first explicit representation of the climate series as a sequence of latent states.
 
-`ACF_PACF_Metrics_1990_2025.xlsx`
+The HMM results indicate that observations can be organized into statistically distinguishable states with different temporal probabilities.
 
-The ACF and PACF diagnostics demonstrate why temporal dependence must be considered when interpreting climate-state persistence. A climate observation is not necessarily independent of its preceding observations; consequently, consecutive observations can exhibit memory that is relevant to regime identification.
+The importance of this result is conceptual: the observed climate record can be viewed as the manifestation of an underlying state process that is not directly observed.
 
----
-
-# 6. Hidden Markov Model
-
-A Hidden Markov Model was used as a complementary framework for identifying latent climate states.
-
-The HMM approach assumes that the observed climate series is generated by an underlying sequence of unobserved states.
-
-The corresponding regime classifications are presented in:
-
-`Figure_8_HMM_Academic_Regimes_All_Provinces.png`
-
-and the numerical results are stored in:
+The corresponding numerical results are contained in:
 
 `HMM_Model_B_Regimes_All_Provinces.xlsx`
 
-The HMM analysis provides an important conceptual foundation for the subsequent Markov-switching analysis by demonstrating that climate observations can be represented through latent statistical states.
+---
+
+# 12. Markov-Switching Results
+
+## 12.1 Two-Regime Model
+
+### Figure 10 — Markov-Switching Tmax
+
+![Figure 10](Figure_10_Markov_Switching_T2M_MAX.png)
+
+The two-regime model provides the simplest representation of state-dependent temperature behaviour.
+
+The model distinguishes observations according to their estimated regime membership and demonstrates that the temperature series can be represented through different statistical states rather than a single constant mean.
+
+The two-regime output is provided in:
+
+`Markov_Switching_2Regime_Analysis_1990_2025.xlsx`
 
 ---
 
-# 7. Markov-Switching Model
+# 13. Three-Regime Model
 
-The central model is expressed as:
+### Figure 11 — Three-Regime Markov-Switching Model
 
-[
-Y_t=\mu_{S_t}+\epsilon_t
-]
+![Figure 11](Figure_11_Markov_Switching_3Regime_T2M_MAX.png)
 
-where:
+The three-regime specification provides greater differentiation among climate states.
 
-* (Y_t) is the observed climate variable;
-* (\mu_{S_t}) is the regime-specific mean;
-* (S_t) is the latent climate regime;
-* (\epsilon_t) is the model residual.
+Instead of forcing observations into a simple low/high structure, the three-regime model allows an intermediate statistical state to emerge.
 
-The latent state follows a first-order Markov process:
-
-[
-P(S_t=j\mid S_{t-1}=i)=p_{ij}
-]
-
-where (p_{ij}) represents the probability of moving from state (i) to state (j).
-
-The diagonal elements of the transition matrix,
-
-[
-p_{ii},
-]
-
-represent the probability of remaining in the same regime and therefore provide a direct measure of regime persistence.
+This is particularly useful when the climate distribution contains a relatively normal or transitional state between lower and higher temperature conditions.
 
 ---
 
-# 8. Alternative Regime Specifications
+## 13.1 Empirical Three-Regime Structure
 
-To avoid imposing an arbitrary number of states, alternative specifications were examined.
+### Figure 12 — Empirical Three-Regime Classification
 
-### Two-Regime Specification
+![Figure 12](Figure_12_Empirical_3Regime_T2M_MAX.png)
 
-The two-state model provides a relatively simple distinction between lower and higher climate states.
+The empirical classification illustrates how the estimated regimes are distributed across the observed time series.
 
-### Three-Regime Specification
-
-The three-state structure allows a more detailed separation between relatively cool/normal, warm, and more anomalous warm conditions.
-
-### Four-Regime Specification
-
-The four-state structure allows further subdivision of the climate distribution where statistically justified.
-
-Importantly, regime labels were not treated as predetermined physical categories. Instead, interpretation was based on the estimated statistical characteristics of the states.
-
-The corresponding model outputs include:
-
-* `Markov_Switching_2Regime_Analysis_1990_2025.xlsx`
-* `Markov_Switching_3Regime_Analysis_1990_2025.xlsx`
-* `Markov_Switching_Empirical_3Regime_Analysis.xlsx`
-* `Markov_Switching_Empirical_4Regime_Analysis.xlsx`
-
-These files are accompanied by Figures 10–13.
+The figure provides a temporal interpretation of regime membership and allows periods of sustained regime behaviour to be identified.
 
 ---
 
-# 9. Model Selection
+# 14. Four-Regime Sensitivity Analysis
 
-Alternative regime specifications were evaluated using:
+### Figure 13 — Empirical Four-Regime Classification
+
+![Figure 13](Figure_13_Empirical_4Regime_T2M_MAX.png)
+
+The four-regime analysis represents a sensitivity test of model complexity.
+
+An additional regime can improve the representation of the underlying distribution, but increased complexity is only justified when it produces statistically meaningful and interpretable improvements.
+
+Therefore, the four-regime structure was evaluated alongside simpler specifications rather than automatically selected.
+
+---
+
+# 15. Model Selection Results
+
+### Figure 14 — BIC Model Selection
+
+![Figure 14](Figure_14_BIC_Model_Selection.png)
+
+The model-selection analysis is one of the central components of the project.
+
+The competing regime specifications were evaluated using:
 
 * Akaike Information Criterion (AIC);
 * Bayesian Information Criterion (BIC);
-* Log-Likelihood.
+* log-likelihood.
 
-The model-selection results are contained in:
+The corresponding Excel outputs are:
 
 `Markov_Model_Selection_AIC_BIC.xlsx`
 
@@ -289,602 +395,450 @@ and
 
 `Markov_Regime_Comparison_Model_AB.xlsx`
 
-### Figure 14 — BIC Model Selection
+The BIC is particularly useful because it introduces a stronger penalty for unnecessary model complexity.
 
-![Figure 14 — BIC Model Selection](Figure_14_BIC_Model_Selection.png)
+The comparison demonstrates that regime selection should be based on an objective statistical criterion rather than simply choosing the model with the largest number of states.
 
-The BIC comparison provides an objective basis for determining whether additional regimes provide sufficient improvement in model fit to justify the increase in model complexity.
-
-This is particularly important because a larger number of regimes will almost inevitably provide greater flexibility. The preferred specification therefore should not simply be the most complex model; it should provide an appropriate balance between goodness of fit, parsimony, interpretability, and statistical stability.
+This prevents overfitting and improves interpretability.
 
 ---
 
-# 10. Climate Regime Characteristics
-
-For each identified regime, the study evaluates:
-
-* regime mean;
-* variance;
-* standard deviation;
-* frequency;
-* relative occurrence;
-* expected duration;
-* empirical duration;
-* persistence probability;
-* transition probability.
-
-The corresponding numerical output is provided in:
-
-`Markov_Switching_Regime_Statistics.xlsx`
+# 16. Regime-Specific Characteristics
 
 ### Figure 15 — Regime Means and Confidence Intervals
 
-![Figure 15 — Regime Means and Confidence Intervals](Figure_15_Regime_Means_Confidence_Intervals.png)
+![Figure 15](Figure_15_Regime_Means_Confidence_Intervals.png)
 
-Figure 15 demonstrates the statistical separation among the estimated climate regimes. The confidence intervals provide an additional indication of whether the regime-specific means are clearly differentiated rather than representing arbitrary divisions of a continuous distribution.
+The regime-specific means demonstrate that the identified states are characterized by different thermal conditions.
 
-This distinction is fundamental to the interpretation of the Markov-switching model.
+The confidence intervals provide an additional measure of separation among the states.
+
+The corresponding Excel output is:
+
+`Markov_Switching_Regime_Statistics.xlsx`
+
+The regime statistics provide the basis for assigning meaningful descriptive interpretations to the states.
+
+Importantly, regime labels such as *cool*, *normal*, or *warm* should be interpreted from the estimated statistical properties rather than imposed before model estimation.
 
 ---
 
-# 11. Regime Probabilities
+# 17. Regime Probabilities
 
-The estimated probability of belonging to each regime was calculated throughout the study period.
+### Figure 16 — Temporal Regime Probabilities
 
-The corresponding outputs are:
+![Figure 16](Figure_16_Regime_Probabilities_All_Provinces.png)
+
+The regime-probability analysis provides one of the most informative results of the study.
+
+Instead of assigning each observation to a state with complete certainty, the model estimates the probability that an observation belongs to each regime.
+
+The temporal variation in these probabilities demonstrates that the dominant statistical state of the climate system changes through time.
+
+The corresponding files are:
 
 * `Markov_Switching_Regime_Probabilities.xlsx`
 * `Markov_Switching_Regime_Probabilities_All_Provinces.xlsx`
 
-### Figure 16 — Regime Probabilities
-
-![Figure 16 — Regime Probabilities](Figure_16_Regime_Probabilities_All_Provinces.png)
-
-The temporal evolution of regime probabilities demonstrates that the climate system does not remain statistically homogeneous throughout the entire 1990–2025 period.
-
-Periods of greater probability for one regime are followed by periods in which another state becomes more dominant. This provides empirical evidence for interpreting climate variability through a regime-switching framework rather than exclusively through a single long-term mean.
+This probabilistic interpretation is important because climate states are not necessarily separated by perfectly abrupt boundaries.
 
 ---
 
-# 12. Most Likely Climate Regime
+# 18. Most-Likely Regime
 
-The most likely regime was determined for each observation.
+### Figure 17 — Most-Likely Regimes
 
-The corresponding dataset is:
+![Figure 17](Figure_17_Most_Likely_Regimes_All_Provinces.png)
+
+The most-likely regime classification converts the probabilistic output into a temporal sequence of dominant states.
+
+The figure provides a clear visual representation of how the climate system moves between states.
+
+Periods of consecutive observations assigned to the same regime represent persistent episodes, whereas rapid alternation among regimes indicates greater short-term instability.
+
+The numerical classification is stored in:
 
 `Markov_Switching_Most_Likely_Regimes_All_Provinces.xlsx`
 
-### Figure 17 — Most Likely Regimes
-
-![Figure 17 — Most Likely Regimes](Figure_17_Most_Likely_Regimes_All_Provinces.png)
-
-This figure translates the probabilistic model into a temporal sequence of dominant climate states.
-
-The result is particularly useful for identifying periods during which the regional climate system remained in relatively stable statistical states and periods characterized by rapid transitions.
-
 ---
 
-# 13. Transition Probability Structure
-
-The estimated transition matrices represent one of the most important outputs of the study.
-
-The corresponding Excel file is:
-
-`Markov_Switching_Transition_Matrices_All_Provinces.xlsx`
-
-For a three-regime model:
-
-[
-P=
-\begin{bmatrix}
-p_{11}&p_{12}&p_{13}\
-p_{21}&p_{22}&p_{23}\
-p_{31}&p_{32}&p_{33}
-\end{bmatrix}
-]
-
-where each row represents the origin regime and each column represents the destination regime.
+# 19. Transition Dynamics
 
 ### Figure 18 — Transition Probability Matrix
 
-![Figure 18 — Transition Probability Matrix](Figure_18_Transition_Matrix_Heatmap_All_Provinces.png)
+![Figure 18](Figure_18_Transition_Matrix_Heatmap_All_Provinces.png)
 
-The transition matrices provide direct evidence of the persistence and switching structure of the regional climate system.
+The transition matrix represents the core of the Markov framework.
 
-Large diagonal probabilities indicate that once the system enters a particular regime, it has a relatively high probability of remaining there during the following observation period.
+Each element represents the probability of moving from one climate state to another:
 
-Conversely, larger off-diagonal probabilities indicate greater mobility between climate states.
+[
+P_{ij}=P(S_t=j\mid S_{t-1}=i)
+]
 
-This provides information that is fundamentally different from a conventional linear trend coefficient.
+The diagonal values represent persistence, while the off-diagonal values describe transitions.
+
+The analysis therefore answers questions that cannot be answered by a simple trend:
+
+* How likely is a regime to continue?
+* How likely is it to transition into a warmer state?
+* How likely is a warmer state to return to a lower state?
+* Which regimes have the greatest persistence?
+* Which transitions occur most frequently?
+
+The full numerical results are contained in:
+
+`Markov_Switching_Transition_Matrices_All_Provinces.xlsx`
 
 ---
 
-# 14. Regime Persistence and Expected Duration
+# 20. Regime Persistence
 
-Regime persistence was evaluated through both theoretical expected duration and empirically observed duration.
+A major result of the study is that regime frequency and regime persistence represent different dimensions of climate behaviour.
 
-The expected duration of a regime can be expressed as:
+A regime may occur frequently but remain active for only a short period.
+
+Alternatively, a regime may occur less frequently but persist for substantially longer episodes.
+
+This distinction is critical for climate-risk interpretation.
+
+---
+
+# 21. Expected Regime Duration
+
+### Figure 19 — Expected Durations
+
+![Figure 19](Figure_19_Expected_Durations_All_Provinces.png)
+
+Expected duration is derived from the probability of remaining in the same state:
 
 [
 E(D_i)=\frac{1}{1-p_{ii}}
 ]
 
-where (p_{ii}) is the probability of remaining in regime (i).
+where (p_{ii}) represents the probability of remaining in regime (i).
 
-The relevant numerical outputs are:
+The results therefore translate transition probabilities into a more intuitive measure of temporal persistence.
 
-* `Markov_Switching_Expected_Durations_All_Provinces.xlsx`
-* `Markov_Switching_Empirical_Durations_All_Provinces.xlsx`
-* `Markov_Switching_Empirical_Durations_Table.xlsx`
+The numerical output is provided in:
 
-### Figure 19 — Expected Regime Durations
-
-![Figure 19 — Expected Regime Durations](Figure_19_Expected_Durations_All_Provinces.png)
-
-Figure 19 demonstrates the persistence structure of the identified regimes. Regimes with higher self-transition probabilities naturally produce longer expected durations.
-
-### Figure 20 — Empirical Regime Durations
-
-![Figure 20 — Empirical Regime Durations](Figure_20_Empirical_Durations_All_Provinces.png)
-
-The empirical duration analysis complements the model-based expectation by showing the actual observed lengths of consecutive regime episodes.
-
-The combination of Figures 19 and 20 provides a useful robustness perspective: expected persistence derived from the transition matrix can be compared with the duration of observed regime episodes.
+`Markov_Switching_Expected_Durations_All_Provinces.xlsx`
 
 ---
 
-# 15. Persistence of High-Temperature Regimes
+# 22. Empirical Regime Duration
+
+### Figure 20 — Empirical Durations
+
+![Figure 20](Figure_20_Empirical_Durations_All_Provinces.png)
+
+The empirical duration analysis identifies the actual lengths of consecutive regime episodes.
+
+This provides an important complement to the theoretical expected-duration calculation.
+
+Together, Figures 19 and 20 allow the model-based persistence structure to be compared with the observed temporal behaviour of the climate system.
+
+---
+
+# 23. High-Regime Persistence
 
 ### Figure 21 — High-Regime Duration Comparison
 
-![Figure 21 — High-Regime Duration Comparison](Figure_21_High_Regime_Durations_Comparison.png)
+![Figure 21](Figure_21_High_Regime_Durations_Comparison.png)
 
-The persistence of higher-temperature regimes is particularly important from a climate-change perspective.
+The duration of higher-temperature regimes is particularly relevant for understanding climate stress.
 
-The analysis demonstrates that the relevant question is not simply whether high temperatures occur. Rather, it is necessary to determine:
+The results indicate that the significance of a warm regime should not be evaluated exclusively through its frequency.
 
-* how frequently high-temperature regimes occur;
-* how long they persist;
-* how likely they are to remain high;
-* how readily they transition back to lower regimes.
+Its persistence is equally important.
 
-Therefore, the Markov framework provides a more dynamic interpretation of warming-related climate variability than a conventional mean-temperature comparison.
+A relatively high-temperature state that persists for several consecutive observations may have substantially different environmental implications from an isolated warm observation.
+
+This is one of the major advantages of the Markov-switching framework.
 
 ---
 
-# 16. Regime Frequency
+# 24. Regime Frequencies
 
 ### Figure 22 — Regime Frequencies
 
-![Figure 22 — Regime Frequencies](Figure_22_Regime_Frequencies_All_Provinces.png)
+![Figure 22](Figure_22_Regime_Frequencies_All_Provinces.png)
 
-The frequency analysis identifies the relative occurrence of different climate states.
+The frequency analysis quantifies how often individual regimes occur.
 
-Frequency and persistence should be interpreted jointly.
-
-A regime can be frequent but short-lived, or relatively infrequent but highly persistent. Consequently, frequency alone cannot fully characterize the importance of a climate state.
-
-The Excel output is:
+The corresponding output is:
 
 `Markov_Switching_Regime_Frequencies.xlsx`
 
+Frequency provides a complementary measure to persistence and duration.
+
+The combined interpretation of:
+
+[
+Frequency + Persistence + Duration + Transition
+]
+
+provides a much richer characterization of climate-state behaviour than any single metric.
+
 ---
 
-# 17. Inter-Provincial Climate-Regime Differences
+# 25. Inter-Provincial Differences
 
-One of the principal strengths of the project is the comparison of regime behavior across Southeastern Türkiye.
+### Figure 24 — Inter-Provincial Regime Comparison
 
-### Figure 24 — Inter-Provincial Comparison
+![Figure 24](Figure_24_Inter_Provincial_Comparison.png)
 
-![Figure 24 — Inter-Provincial Comparison](Figure_24_Inter_Provincial_Comparison.png)
+The inter-provincial analysis demonstrates that Southeastern Türkiye should not be treated as a perfectly homogeneous climatic system.
 
-The inter-provincial analysis demonstrates that climate-regime behavior is not spatially homogeneous.
+The provinces differ in their regime characteristics, including:
 
-Different provinces may differ in:
-
+* dominant climate states;
 * regime frequency;
-* regime persistence;
-* transition structure;
-* temperature-state distribution;
-* duration of high-temperature conditions.
+* persistence;
+* duration;
+* transition structure.
 
-The corresponding Excel output is:
+The corresponding numerical output is:
 
 `Analysis_18_Inter_Provincial_Comparison.xlsx`
 
-This comparison is particularly important because a regional average can obscure substantial differences in the temporal behavior of individual locations.
+This result has an important geographical implication.
+
+Regional averages may conceal substantial differences in the internal temporal dynamics of individual locations.
 
 ---
 
-# 18. Minimum-Temperature Regimes
+# 26. Minimum Temperature Regimes
 
 ### Figure 25 — Inter-Provincial Tmin Comparison
 
-![Figure 25 — Inter-Provincial Tmin Comparison](Figure_25_Inter_Provincial_TMIN_Comparison.png)
+![Figure 25](Figure_25_Inter_Provincial_TMIN_Comparison.png)
 
-Minimum temperature provides a complementary perspective to maximum temperature.
+Minimum temperature provides an independent perspective on thermal regime behaviour.
 
-Whereas Tmax primarily reflects daytime thermal conditions, Tmin is particularly informative for detecting changes in nocturnal thermal persistence.
+The inclusion of Tmin is particularly important because nocturnal temperatures may exhibit different temporal dynamics from daytime maximum temperatures.
 
-The analysis therefore provides evidence that climate-regime research should not be restricted to daytime temperature alone.
+Therefore, the study demonstrates that the regional thermal system should not be represented exclusively through Tmax.
 
-The corresponding output is:
+The corresponding results are stored in:
 
 `Analysis_19_Inter_Provincial_TMIN_Comparison.xlsx`
 
 ---
 
-# 19. Humidity Regimes
+# 27. Humidity Regimes
 
 ### Figure 27 — Humidity Distribution
 
-![Figure 27 — Humidity Distribution](Figure_27_Global_Humidity_Distribution.png)
+![Figure 27](Figure_27_Global_Humidity_Distribution.png)
 
-Humidity was examined as an additional component of the climate-regime system.
+Humidity analysis extends the climate-regime framework beyond temperature.
 
-The corresponding numerical output is:
+The corresponding output is:
 
 `Analysis_21_Global_Humidity_Regimes.xlsx`
 
-The inclusion of humidity is scientifically important because temperature alone does not fully describe atmospheric thermal stress or moisture conditions.
+Humidity provides important contextual information for interpreting thermal states.
 
-Humidity regimes can alter the interpretation of warm conditions by distinguishing comparatively dry thermal states from warmer and more moisture-laden atmospheric states.
+A warm state under relatively dry atmospheric conditions may represent a different environmental condition from a warm state accompanied by higher atmospheric moisture.
+
+Consequently, humidity adds a second dimension to the interpretation of regional climate regimes.
 
 ---
 
-# 20. Multivariate Climate-Regime Analysis
+# 28. Multivariate Climate-Regime Analysis
 
 ### Figure 28 — Multivariate Regime Comparison
 
-![Figure 28 — Multivariate Regime Comparison](Figure_28_Multi_Variable_Regime_Comparison.png)
+![Figure 28](Figure_28_Multi_Variable_Regime_Comparison.png)
 
-The multivariate analysis extends the study beyond a single climate variable.
+The multivariate analysis examines whether multiple climate variables exhibit coordinated regime behaviour.
 
 The corresponding output is:
 
 `Analysis_22_Multi_Variable_Comparison.xlsx`
 
-The purpose of this analysis is to determine whether the identified regime structure is limited to one variable or whether multiple components of the climate system exhibit coordinated state changes.
+This represents an important methodological extension because climate systems are inherently multivariate.
 
-This represents an important methodological extension because regional climate variability is inherently multivariate.
+Temperature, precipitation, and atmospheric moisture do not operate independently.
+
+A multivariate regime framework therefore provides a more realistic representation of the underlying climate system than a purely univariate model.
 
 ---
 
-# 21. Compound Hot-Dry Regimes
+# 29. Compound Hot-Dry Regimes
 
 ### Figure 30 — Integrated Multivariate Results
 
-![Figure 30 — Multivariate Integrated Results](Figure_30_Multivariate_Integrated_Results.png)
+![Figure 30](Figure_30_Multivariate_Integrated_Results.png)
 
-The compound analysis represents one of the most important extensions of the project.
+The compound hot-dry analysis represents one of the most important applied components of the study.
 
 The corresponding Excel output is:
 
 `Analysis_23_Triple_Compound_Hot_Dry.xlsx`
 
-The analysis examines the possibility that high-temperature and dry conditions occur as part of the same climate-state structure.
+The objective is to identify conditions in which elevated thermal states and dry conditions occur together.
 
-This is more informative than analyzing temperature and precipitation independently because compound events may generate impacts that are stronger than those associated with either hazard individually.
+This is scientifically important because compound hot-dry events may generate greater environmental stress than either hot or dry conditions considered separately.
 
-The resulting framework therefore provides a transition from conventional climate variability analysis toward **compound climate-risk characterization**.
+The compound framework therefore links statistical climate-state analysis to potential impacts on:
 
----
-
-# 22. Complete Graphical Results
-
-## Figure 1 — Tmax Distribution
-
-![Figure 1](Figure_1_T2M_MAX_Boxplot.png)
-
-The boxplot provides the initial comparison of maximum-temperature distributions and identifies differences in central tendency and variability among the analyzed locations.
+* water resources;
+* agriculture;
+* soil moisture;
+* ecosystems;
+* drought vulnerability;
+* thermal stress;
+* environmental management.
 
 ---
 
-## Figure 2 — Precipitation Trends
+# 30. Integrated Results
 
-![Figure 2](Figure_2_Precipitation_Trends.png)
+The complete set of analyses demonstrates that climate variability in Southeastern Türkiye contains several interconnected dimensions.
 
-The precipitation series demonstrates the temporal variability of rainfall and provides the hydroclimatic background for the subsequent regime analysis.
+## 30.1 Statistical Regime Structure
 
----
-
-## Figure 3 — Long-Term T2M Behaviour
-
-![Figure 3](Figure_3_LongTerm_Behavior_T2M.png)
-
-The long-term temperature behavior establishes the baseline temporal structure against which regime transitions are interpreted.
+The HMM and Markov-switching results demonstrate that the observed climate series can be represented through latent statistical states.
 
 ---
 
-## Figure 4 — Seasonality Cycle
+## 30.2 Temporal Persistence
 
-![Figure 4](Figure_4_Seasonality_Cycle.png)
+The transition matrices and duration analyses demonstrate that these states are not independent observations.
 
-The pronounced seasonal structure confirms the importance of accounting for periodic climate variability before interpreting latent regimes.
-
----
-
-## Figure 5 — Precipitation Fluctuations
-
-![Figure 5](Figure_5_Precipitation_Fluctuations.png)
-
-The precipitation-fluctuation analysis illustrates the episodic and irregular nature of rainfall variability.
+Some states show stronger temporal persistence than others.
 
 ---
 
-## Figure 6 — ACF
+## 30.3 Regime Switching
 
-![Figure 6](Figure_6_ACF_All_Provinces.png)
+The climate system repeatedly transitions between different statistical conditions.
 
-The ACF results demonstrate temporal dependence within the climate series.
-
----
-
-## Figure 7 — PACF
-
-![Figure 7](Figure_7_PACF_All_Provinces.png)
-
-The PACF complements the ACF analysis by identifying partial dependence at individual lags.
+This indicates that the temporal structure of climate variability is dynamic rather than stationary in a simple descriptive sense.
 
 ---
 
-## Figure 8 — HMM Academic Regimes
+## 30.4 Spatial Heterogeneity
 
-![Figure 8](Figure_8_HMM_Academic_Regimes_All_Provinces.png)
+The inter-provincial analyses demonstrate that regime characteristics vary spatially.
 
-The HMM classification provides a latent-state representation of climate variability.
-
----
-
-## Figure 9 — Standardized Climate Anomalies
-
-![Figure 9](Figure_9_Standardized_Anomalies_All_Provinces.png)
-
-Standardized anomalies allow climate variability to be compared on a common statistical scale.
+Consequently, regional climate change assessments should consider local differences in state persistence and transition behaviour.
 
 ---
 
-## Figure 10 — Markov-Switching Tmax
+## 30.5 Thermal Asymmetry
 
-![Figure 10](Figure_10_Markov_Switching_T2M_MAX.png)
-
-The Markov-switching representation demonstrates the temporal allocation of observations among statistically distinct states.
+The separate Tmax and Tmin analyses indicate that daytime and nocturnal thermal behaviour should be considered independently.
 
 ---
 
-## Figure 11 — Three-Regime Markov-Switching Model
+## 30.6 Moisture Dimension
 
-![Figure 11](Figure_11_Markov_Switching_3Regime_T2M_MAX.png)
-
-The three-regime specification provides a more differentiated representation of the temperature-state structure.
+The humidity and precipitation analyses demonstrate that thermal regime interpretation is incomplete without considering atmospheric moisture.
 
 ---
 
-## Figure 12 — Empirical Three-Regime Classification
+## 30.7 Compound Climate Behaviour
 
-![Figure 12](Figure_12_Empirical_3Regime_T2M_MAX.png)
-
-The empirical classification translates the model states into an observed temporal sequence.
+The multivariate and hot-dry analyses demonstrate the importance of considering simultaneous changes in multiple climate variables.
 
 ---
 
-## Figure 13 — Empirical Four-Regime Classification
+# 31. Main Scientific Findings
 
-![Figure 13](Figure_13_Empirical_4Regime_T2M_MAX.png)
+The complete analytical framework leads to the following major findings.
 
-The four-regime structure provides an additional sensitivity analysis of regime complexity.
+### Finding 1 — Climate variability is regime-dependent
 
----
+The regional climate series cannot be interpreted exclusively as a single homogeneous statistical process.
 
-## Figure 14 — BIC Model Selection
-
-![Figure 14](Figure_14_BIC_Model_Selection.png)
-
-The BIC comparison provides the principal evidence for selecting an appropriate level of regime complexity.
+Distinct climate states emerge from the HMM and Markov-switching analyses.
 
 ---
 
-## Figure 15 — Regime Means and Confidence Intervals
+### Finding 2 — Regimes possess different persistence characteristics
 
-![Figure 15](Figure_15_Regime_Means_Confidence_Intervals.png)
+The transition matrices demonstrate that the probability of remaining in a state differs among regimes.
 
-The figure confirms the statistical differentiation of the estimated regimes.
-
----
-
-## Figure 16 — Regime Probabilities
-
-![Figure 16](Figure_16_Regime_Probabilities_All_Provinces.png)
-
-The probability series reveal temporal changes in the likelihood of individual climate states.
+Consequently, some climate states are more persistent than others.
 
 ---
 
-## Figure 17 — Most Likely Regimes
+### Finding 3 — Regime duration is a critical climate indicator
 
-![Figure 17](Figure_17_Most_Likely_Regimes_All_Provinces.png)
+Expected and empirical duration analyses demonstrate that the length of a climate episode provides information beyond simple frequency.
 
-The most-likely-state sequence provides a compact representation of the temporal switching structure.
-
----
-
-## Figure 18 — Transition Matrix
-
-![Figure 18](Figure_18_Transition_Matrix_Heatmap_All_Provinces.png)
-
-The transition matrix quantifies persistence and movement between regimes.
+Persistent warm or anomalous regimes are particularly important from an environmental perspective.
 
 ---
 
-## Figure 19 — Expected Duration
+### Finding 4 — Climate-state probability changes through time
 
-![Figure 19](Figure_19_Expected_Durations_All_Provinces.png)
+The regime-probability analysis demonstrates temporal changes in the likelihood of individual states.
 
-Expected duration quantifies the theoretical persistence of each regime.
-
----
-
-## Figure 20 — Empirical Duration
-
-![Figure 20](Figure_20_Empirical_Durations_All_Provinces.png)
-
-Empirical duration provides an observed counterpart to model-based persistence.
+This indicates that the dominant statistical character of the climate system is not constant throughout the entire study period.
 
 ---
 
-## Figure 21 — High-Regime Duration
+### Finding 5 — Provincial climate dynamics are heterogeneous
 
-![Figure 21](Figure_21_High_Regime_Durations_Comparison.png)
+The inter-provincial analysis demonstrates that climate regimes are not distributed identically across Southeastern Türkiye.
 
-High-regime duration highlights the persistence of elevated-temperature conditions.
-
----
-
-## Figure 22 — Regime Frequency
-
-![Figure 22](Figure_22_Regime_Frequencies_All_Provinces.png)
-
-Frequency analysis quantifies the relative occurrence of the identified climate states.
+This emphasizes the importance of location-specific analysis.
 
 ---
 
-## Figure 24 — Inter-Provincial Regime Comparison
+### Finding 6 — Tmin adds important information
 
-![Figure 24](Figure_24_Inter_Provincial_Comparison.png)
-
-The comparison highlights spatial heterogeneity in climate-regime behavior.
+Minimum temperature provides a complementary representation of regional thermal variability and allows nocturnal conditions to be evaluated independently from daytime conditions.
 
 ---
 
-## Figure 25 — Tmin Comparison
+### Finding 7 — Humidity modifies climate-state interpretation
 
-![Figure 25](Figure_25_Inter_Provincial_TMIN_Comparison.png)
-
-Minimum-temperature regimes provide an independent perspective on nocturnal thermal variability.
+The humidity analysis demonstrates that thermal regimes should be interpreted within a broader atmospheric context.
 
 ---
 
-## Figure 27 — Humidity Distribution
+### Finding 8 — Compound hot-dry conditions provide a more integrated risk perspective
 
-![Figure 27](Figure_27_Global_Humidity_Distribution.png)
-
-Humidity analysis expands the regime framework beyond temperature and precipitation.
+The compound analysis demonstrates the importance of studying the simultaneous occurrence of thermal and moisture-related anomalies.
 
 ---
 
-## Figure 28 — Multivariate Regime Comparison
+# 32. Why the Markov-Switching Framework Matters
 
-![Figure 28](Figure_28_Multi_Variable_Regime_Comparison.png)
+The central methodological contribution of this project is the transition from:
 
-The multivariate comparison investigates whether different climate variables exhibit coherent regime structures.
+```text
+Trend
+```
 
----
+toward:
 
-## Figure 30 — Integrated Multivariate Results
+```text
+Regime
+   ↓
+Persistence
+   ↓
+Transition
+   ↓
+Duration
+   ↓
+Frequency
+   ↓
+Compound Behaviour
+```
 
-![Figure 30](Figure_30_Multivariate_Integrated_Results.png)
-
-The integrated analysis summarizes the multivariate regime structure and provides the final synthesis of the study.
-
----
-
-# 23. Main Findings
-
-The combined results of the exploratory, HMM, Markov-switching, duration, transition, inter-provincial, humidity, and multivariate analyses support several major conclusions.
-
-### 23.1 Climate variability is not statistically homogeneous
-
-The results demonstrate that the climate system can be represented through distinguishable statistical states rather than a single invariant process.
-
-This is the central finding of the study.
-
----
-
-### 23.2 Regime persistence is an important component of climate variability
-
-The transition matrices and duration analyses demonstrate that climate states possess different levels of persistence.
-
-Therefore, the importance of a climate regime depends not only on its frequency but also on its ability to persist through consecutive observations.
-
----
-
-### 23.3 Warm conditions should be interpreted dynamically
-
-The analysis shows that elevated temperatures should not be evaluated exclusively through their long-term mean or linear trend.
-
-A regime-oriented interpretation additionally asks:
-
-* how often warm states occur;
-* how long they persist;
-* what states precede them;
-* what states follow them;
-* whether warm states repeatedly transition into more anomalous states.
-
----
-
-### 23.4 Climate-regime behavior differs among provinces
-
-The inter-provincial outputs demonstrate that Southeastern Türkiye should not be interpreted as a completely homogeneous climatic unit.
-
-Different locations exhibit different combinations of:
-
-* regime occurrence;
-* persistence;
-* transition structure;
-* temperature characteristics;
-* minimum-temperature behavior.
-
----
-
-### 23.5 Tmax and Tmin provide complementary information
-
-Maximum and minimum temperatures describe different components of regional thermal variability.
-
-The inclusion of Tmin therefore strengthens the interpretation of the regional climate system by allowing daytime and nocturnal thermal behavior to be considered separately.
-
----
-
-### 23.6 Humidity adds a second dimension to thermal interpretation
-
-The humidity analysis demonstrates the importance of considering atmospheric moisture alongside temperature.
-
-A regime-based framework therefore allows thermal states to be interpreted in relation to broader atmospheric conditions rather than temperature alone.
-
----
-
-### 23.7 Compound hot-dry states represent an important extension
-
-The compound analysis provides a transition from single-variable climate statistics toward integrated climate-risk characterization.
-
-The co-occurrence of hot and dry conditions is particularly relevant for water resources, agriculture, ecosystem stress, and drought-related vulnerability in Southeastern Türkiye.
-
----
-
-### 23.8 Markov-switching analysis provides information beyond conventional trend analysis
-
-A linear trend describes the average direction of change.
-
-A Markov-switching model additionally describes:
-
-[
-\text{State} \rightarrow \text{Persistence} \rightarrow \text{Transition} \rightarrow \text{Duration}
-]
-
-This makes it possible to investigate the internal temporal structure of climate variability.
-
----
-
-# 24. Scientific Interpretation
-
-The main conceptual contribution of this study is the treatment of regional climate variability as a **dynamic stochastic system with multiple latent states**.
-
-Under a conventional framework, a temperature series can be represented approximately as:
+A conventional trend model may estimate:
 
 [
 Y_t=\alpha+\beta t+\epsilon_t
 ]
 
-where (\beta) represents the long-term trend.
+and therefore summarize the average direction of change.
 
 The Markov-switching framework instead allows:
 
@@ -892,46 +846,89 @@ The Markov-switching framework instead allows:
 Y_t=\mu_{S_t}+\epsilon_t
 ]
 
-where the statistical expectation changes according to the latent regime (S_t).
+where the expected value depends on the current latent state.
 
-This distinction is scientifically important.
-
-A climate system can exhibit a modest overall trend while simultaneously undergoing substantial changes in:
-
-* regime frequency;
-* regime persistence;
-* transition probability;
-* duration;
-* variance;
-* compound-state occurrence.
-
-Therefore, the absence of a very large linear trend does not necessarily imply that the underlying climate variability structure is unchanged.
+This makes it possible to investigate the internal organization of climate variability.
 
 ---
 
-# 25. Reproducibility
+# 33. Practical Climate Interpretation
 
-All analyses were conducted in **R**.
+The regime-based framework has potential applications in:
 
-The repository provides:
+### Water Resources
 
-* R scripts;
+Persistent dry regimes may indicate periods of increased hydrological stress.
+
+### Agriculture
+
+Persistent warm or compound hot-dry regimes may affect crop water requirements and agricultural productivity.
+
+### Ecosystems
+
+Long-lasting thermal and moisture anomalies may influence ecosystem functioning and vegetation stress.
+
+### Drought Monitoring
+
+Regime persistence can complement conventional drought indices by identifying statistically coherent climate states.
+
+### Heat-Stress Assessment
+
+Persistent warm regimes can provide a useful statistical basis for subsequent heat-stress analyses.
+
+### Climate-Risk Assessment
+
+Transition probabilities and expected durations can help characterize the temporal behaviour of climate hazards.
+
+---
+
+# 34. Limitations
+
+The Markov-switching framework should not be interpreted as proving a causal mechanism.
+
+The detected regimes represent **statistical states of the observed climate system**.
+
+They should therefore not automatically be interpreted as direct evidence of specific physical mechanisms without additional atmospheric, oceanic, land-surface, or circulation-based analysis.
+
+Furthermore:
+
+* regime labels depend on model specification;
+* the number of states influences interpretation;
+* model selection criteria should be considered jointly;
+* climate regimes may not correspond to physically discrete states;
+* statistical persistence does not automatically imply causation;
+* compound-event interpretation requires careful threshold definition.
+
+These limitations are important for maintaining a scientifically conservative interpretation.
+
+---
+
+# 35. Reproducibility
+
+The complete project was developed in **R**.
+
+The repository contains:
+
+* R analysis scripts;
 * processed Excel datasets;
-* Markov-switching outputs;
-* HMM outputs;
+* statistical outputs;
+* Markov-switching results;
+* HMM results;
 * model-selection results;
 * transition matrices;
 * regime probabilities;
 * duration statistics;
 * frequency statistics;
-* multivariate analyses;
+* inter-provincial comparisons;
+* multivariate outputs;
+* compound hot-dry results;
 * graphical outputs.
 
-The repository therefore provides a transparent computational framework through which the analytical workflow can be examined and reproduced.
+The analytical workflow is therefore designed to be transparent and reproducible.
 
 ---
 
-# 26. Repository Structure
+# 36. Repository Contents
 
 ```text
 Hidden-Climate-Regimes/
@@ -941,9 +938,12 @@ Hidden-Climate-Regimes/
 │   ├── 2. Code.R
 │   ├── 3. Code.R
 │   ├── ...
-│   ├── 23. Code.R
+│   └── 23. Code.R
 │
 ├── Excel Results
+│   ├── Southeastern_Anatolia_Descriptive_Statistics_1990_2025.xlsx
+│   ├── Southeastern_Anatolia_LongTerm_Behavior_Metrics.xlsx
+│   ├── Standardized_Climate_Panel_1990_2025.xlsx
 │   ├── ACF_PACF_Metrics_1990_2025.xlsx
 │   ├── HMM_Model_B_Regimes_All_Provinces.xlsx
 │   ├── Markov_Model_Selection_AIC_BIC.xlsx
@@ -952,59 +952,184 @@ Hidden-Climate-Regimes/
 │   ├── Markov_Switching_3Regime_Analysis_1990_2025.xlsx
 │   ├── Markov_Switching_Empirical_3Regime_Analysis.xlsx
 │   ├── Markov_Switching_Empirical_4Regime_Analysis.xlsx
-│   ├── Markov_Switching_Empirical_Durations_All_Provinces.xlsx
-│   ├── Markov_Switching_Empirical_Durations_Table.xlsx
-│   ├── Markov_Switching_Expected_Durations_All_Provinces.xlsx
-│   ├── Markov_Switching_Most_Likely_Regimes_All_Provinces.xlsx
-│   ├── Markov_Switching_Regime_Frequencies.xlsx
+│   ├── Markov_Switching_Regime_Statistics.xlsx
 │   ├── Markov_Switching_Regime_Probabilities.xlsx
 │   ├── Markov_Switching_Regime_Probabilities_All_Provinces.xlsx
-│   ├── Markov_Switching_Regime_Statistics.xlsx
+│   ├── Markov_Switching_Most_Likely_Regimes_All_Provinces.xlsx
 │   ├── Markov_Switching_Transition_Matrices_All_Provinces.xlsx
-│   ├── Southeastern_Anatolia_Descriptive_Statistics_1990_2025.xlsx
-│   ├── Southeastern_Anatolia_LongTerm_Behavior_Metrics.xlsx
-│   ├── Standardized_Climate_Panel_1990_2025.xlsx
+│   ├── Markov_Switching_Expected_Durations_All_Provinces.xlsx
+│   ├── Markov_Switching_Empirical_Durations_All_Provinces.xlsx
+│   ├── Markov_Switching_Empirical_Durations_Table.xlsx
+│   ├── Markov_Switching_Regime_Frequencies.xlsx
+│   ├── Analysis_18_Inter_Provincial_Comparison.xlsx
+│   ├── Analysis_19_Inter_Provincial_TMIN_Comparison.xlsx
+│   ├── Analysis_21_Global_Humidity_Regimes.xlsx
+│   ├── Analysis_22_Multi_Variable_Comparison.xlsx
+│   ├── Analysis_23_Triple_Compound_Hot_Dry.xlsx
 │   └── ...
 │
 ├── Figures
-│   ├── Figure 1–30
-│   └── PNG outputs
+│   ├── Figure 1
+│   ├── Figure 2
+│   ├── ...
+│   └── Figure 30
 │
 └── README.md
 ```
 
-The repository currently contains the complete collection of these analytical Excel outputs and graphical results.
+---
+
+# 37. Complete Figure Gallery
+
+## Figure 1 — Tmax Distribution
+
+![Figure 1](Figure_1_T2M_MAX_Boxplot.png)
+
+## Figure 2 — Precipitation Trends
+
+![Figure 2](Figure_2_Precipitation_Trends.png)
+
+## Figure 3 — Long-Term T2M Behaviour
+
+![Figure 3](Figure_3_LongTerm_Behavior_T2M.png)
+
+## Figure 4 — Seasonal Cycle
+
+![Figure 4](Figure_4_Seasonality_Cycle.png)
+
+## Figure 5 — Precipitation Fluctuations
+
+![Figure 5](Figure_5_Precipitation_Fluctuations.png)
+
+## Figure 6 — ACF
+
+![Figure 6](Figure_6_ACF_All_Provinces.png)
+
+## Figure 7 — PACF
+
+![Figure 7](Figure_7_PACF_All_Provinces.png)
+
+## Figure 8 — HMM Academic Regimes
+
+![Figure 8](Figure_8_HMM_Academic_Regimes_All_Provinces.png)
+
+## Figure 9 — Standardized Anomalies
+
+![Figure 9](Figure_9_Standardized_Anomalies_All_Provinces.png)
+
+## Figure 10 — Markov-Switching Tmax
+
+![Figure 10](Figure_10_Markov_Switching_T2M_MAX.png)
+
+## Figure 11 — Three-Regime Markov-Switching
+
+![Figure 11](Figure_11_Markov_Switching_3Regime_T2M_MAX.png)
+
+## Figure 12 — Empirical Three-Regime Classification
+
+![Figure 12](Figure_12_Empirical_3Regime_T2M_MAX.png)
+
+## Figure 13 — Empirical Four-Regime Classification
+
+![Figure 13](Figure_13_Empirical_4Regime_T2M_MAX.png)
+
+## Figure 14 — BIC Model Selection
+
+![Figure 14](Figure_14_BIC_Model_Selection.png)
+
+## Figure 15 — Regime Means and Confidence Intervals
+
+![Figure 15](Figure_15_Regime_Means_Confidence_Intervals.png)
+
+## Figure 16 — Regime Probabilities
+
+![Figure 16](Figure_16_Regime_Probabilities_All_Provinces.png)
+
+## Figure 17 — Most-Likely Regimes
+
+![Figure 17](Figure_17_Most_Likely_Regimes_All_Provinces.png)
+
+## Figure 18 — Transition Matrix
+
+![Figure 18](Figure_18_Transition_Matrix_Heatmap_All_Provinces.png)
+
+## Figure 19 — Expected Regime Duration
+
+![Figure 19](Figure_19_Expected_Durations_All_Provinces.png)
+
+## Figure 20 — Empirical Regime Duration
+
+![Figure 20](Figure_20_Empirical_Durations_All_Provinces.png)
+
+## Figure 21 — High-Regime Duration Comparison
+
+![Figure 21](Figure_21_High_Regime_Durations_Comparison.png)
+
+## Figure 22 — Regime Frequencies
+
+![Figure 22](Figure_22_Regime_Frequencies_All_Provinces.png)
+
+## Figure 24 — Inter-Provincial Comparison
+
+![Figure 24](Figure_24_Inter_Provincial_Comparison.png)
+
+## Figure 25 — Inter-Provincial Tmin Comparison
+
+![Figure 25](Figure_25_Inter_Provincial_TMIN_Comparison.png)
+
+## Figure 27 — Humidity Distribution
+
+![Figure 27](Figure_27_Global_Humidity_Distribution.png)
+
+## Figure 28 — Multivariate Regime Comparison
+
+![Figure 28](Figure_28_Multi_Variable_Regime_Comparison.png)
+
+## Figure 30 — Integrated Multivariate Results
+
+![Figure 30](Figure_30_Multivariate_Integrated_Results.png)
 
 ---
 
-# 27. Conclusion
+# 38. Conclusion
 
-This study demonstrates the value of a regime-based approach for investigating climate variability in Southeastern Türkiye.
+The present study develops a regime-oriented statistical framework for examining climate variability in Southeastern Türkiye during 1990–2025.
 
-The principal conclusion is that climate variability should not necessarily be represented as a single, temporally stable statistical process. Instead, the regional climate system can be investigated as a dynamic process characterized by multiple states, different levels of persistence, and probabilistic transitions between regimes.
+The analysis demonstrates that the regional climate system can be investigated through multiple statistical states characterized by different levels of occurrence, persistence, duration, and transition probability.
 
-The Markov-switching framework provides a quantitative description of this behavior through:
+The principal contribution of the project is therefore not simply the detection of warming or drying trends. Instead, it is the identification of the **internal temporal structure of climate variability**.
 
-* regime-specific statistics;
-* transition probabilities;
-* persistence probabilities;
-* expected durations;
-* empirical durations;
-* regime frequencies;
-* temporal regime probabilities;
-* inter-provincial differences;
+The combined HMM and Markov-switching framework allows the study to investigate:
+
+* hidden climate states;
+* regime-specific behaviour;
+* temporal probabilities;
+* transition dynamics;
+* regime persistence;
+* expected duration;
+* empirical duration;
+* frequency;
+* provincial heterogeneity;
+* minimum-temperature behaviour;
+* humidity regimes;
 * multivariate climate states;
 * compound hot-dry conditions.
 
-The study therefore moves beyond the conventional question:
+The results suggest that understanding climate variability requires attention not only to the magnitude and direction of change, but also to the **state structure and temporal persistence of the climate system**.
 
-> **“Is the climate getting warmer or drier?”**
+In this sense, the study provides a methodological bridge between conventional climate variability analysis and more advanced **state-dependent climate dynamics**.
 
-and addresses a more structurally informative question:
+The framework can be extended in future research to:
 
-> **“How does the regional climate system move between different statistical states, how persistent are those states, and how is the structure of climate variability changing?”**
-
-This perspective provides an additional methodological framework for climate variability research in Southeastern Türkiye and may be particularly valuable for future investigations of climate extremes, drought, heat stress, compound hazards, and regional climate risk.
+* drought regimes;
+* heatwave regimes;
+* compound hot-dry extremes;
+* precipitation regimes;
+* future climate projections;
+* climate-model ensemble analysis;
+* teleconnection-driven regime transitions;
+* extreme-event persistence;
+* climate-risk assessment.
 
 ---
 
@@ -1012,24 +1137,22 @@ This perspective provides an additional methodological framework for climate var
 
 ## Ahmet Solmaz
 
-**Geography and Climate Research — Türkiye**
-
-This research project, including the statistical analyses, R-based computational workflow, Excel outputs, regime analysis, and visualizations, was prepared by **Ahmet Solmaz**.
+This project, including the data-processing workflow, statistical analyses, R-based computational procedures, Excel outputs, regime analysis, and graphical visualizations, was prepared by **Ahmet Solmaz**.
 
 ---
 
-## Citation
+# Citation
 
-If you use the methodology, code, processed outputs, figures, or analytical framework of this repository, please provide appropriate attribution to:
+**Solmaz, A.** *Hidden Climate Regimes: A Markov-Switching Analysis of Climate Variability in Southeastern Türkiye.*
 
-**Solmaz, A. — Hidden Climate Regimes: A Markov-Switching Analysis of Climate Variability in Southeastern Türkiye.**
+If using the analytical framework, code, figures, or processed outputs, please provide appropriate attribution to the author.
 
 ---
 
-## License
+# License
 
 This repository is intended for academic and research purposes.
 
 Please provide appropriate attribution when reusing the code, analytical outputs, figures, or derived results.
 
-© Ahmet Solmaz
+**© Ahmet Solmaz**
